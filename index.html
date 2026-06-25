@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Чат</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { background: white; padding: 10px 15px; border-radius: 15px; max-width: 80%; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .msg.my { align-self: flex-end; background: #007bff; color: white; }
+        #input-area { padding: 20px; background: white; display: flex; gap: 10px; border-top: 1px solid #ddd; }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; }
+        button { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="login">
+    <input type="text" id="nickname" placeholder="Введите ваш псевдоним...">
+    <button onclick="setNick()">Войти</button>
+</div>
+
+<div id="chat-ui" style="display:none; flex-direction:column; height: 100%;">
+    <div id="chat"></div>
+    <div id="input-area">
+        <input type="text" id="msg-input" placeholder="Сообщение...">
+        <button onclick="send()">Отправить</button>
+    </div>
+</div>
+
+<audio id="send-sound" src="https://actions.google.com/sounds/v1/ui/click.ogg"></audio>
+<audio id="receive-sound" src="https://actions.google.com/sounds/v1/ui/notification_toast.ogg"></audio>
+
+<script>
+    let nick = "";
+    function setNick() {
+        nick = document.getElementById('nickname').value;
+        if(nick) { document.getElementById('login').style.display = 'none'; document.getElementById('chat-ui').style.display = 'flex'; }
+    }
+
+    function send() {
+        const input = document.getElementById('msg-input');
+        if(!input.value) return;
+        document.getElementById('send-sound').play();
+        // ВАШ КОД ОТПРАВКИ СОКЕТА ЗДЕСЬ (например: socket.emit('chat', nick + ': ' + input.value))
+        input.value = '';
+    }
+
+    // Когда приходит сообщение:
+    function onMessageReceived() {
+        document.getElementById('receive-sound').play();
+    }
+</script>
+</body>
+</html>
